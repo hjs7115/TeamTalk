@@ -21,24 +21,37 @@ configurations {
 }
 
 repositories {
+
     mavenCentral()
+
 }
 
+
+
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+// Swagger 의존성 (springdoc-openapi)
+    implementation'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+// JSP 관련 의존성
+    implementation'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    implementation'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:2.0.0'
+    implementation'org.glassfish.web:jakarta.servlet.jsp.jstl:2.0.0'
+
+// Spring Boot 및 MyBatis 의존성
+    implementation'org.springframework.boot:spring-boot-starter-security'
+    implementation'org.springframework.boot:spring-boot-starter-web'
+    implementation'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+// MySQL Connector
+    runtimeOnly'com.mysql:mysql-connector-j'
+
+// 테스트 관련 의존성
+    testImplementation'org.springframework.boot:spring-boot-starter-test'
+    testImplementation'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+    testImplementation'org.springframework.security:spring-security-test'
+    testRuntimeOnly'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
