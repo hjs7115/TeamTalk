@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
+import com.example.chat_server.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -18,33 +19,45 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthenticationManager authManager;
+    private final UserService userService; // 🔽 추가
 
-    public AuthController(AuthenticationManager authManager) {
+    public AuthController(AuthenticationManager authManager, UserService userService) {
         this.authManager = authManager;
+        this.userService = userService;
     }
 
-    // ✅ 로그인
+    // ✅ 회원가입 (username, password 받음)
+    @PostMapping("/auth/register")
+    public Map<String, Object> register(@RequestBody RegisterRequest req) {
+        if (req.username() == null || req.username().isBlank() ||
+                req.password() == null || req.password().isBlank()) {
+            return Map.of("ok", false, "message", "username/password는 필수입니다.");
+        }
+        try {
+            userService.register(req.username(), req.password());
+            return Map.of("ok", true);
+        } catch (IllegalArgumentException e) {
+            return Map.of("ok", false, "message", e.getMessage());
+        }
+    }
+
+    // ✅ 로그인 (기존 그대로)
     @PostMapping("/auth/login")
     public Map<String, Object> login(@RequestBody LoginRequest req, HttpServletRequest request) {
-
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(req.username(), req.password());
 
-        Authentication authentication = authManager.authenticate(token); // 실패 시 자동으로 401 에러
+        Authentication authentication = authManager.authenticate(token); // 실패 시 401
 
-        // 세션에 인증정보 저장
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         HttpSession session = request.getSession(true);
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, context);
 
-        return Map.of(
-                "ok", true,
-                "username", authentication.getName()
-        );
+        return Map.of("ok", true, "username", authentication.getName());
     }
 
-    // ✅ 로그아웃
+    // ✅ 로그아웃 (기존 그대로)
     @PostMapping("/auth/logout")
     public Map<String, Object> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -53,11 +66,10 @@ public class AuthController {
         return Map.of("ok", true);
     }
 
-    // ✅ 로그인 여부 확인
+    // ✅ 로그인 여부 (기존 그대로)
     @GetMapping("/me")
     public Map<String, Object> me(Authentication auth) {
         if (auth == null) return Map.of("authenticated", false);
-
         return Map.of(
                 "authenticated", true,
                 "username", auth.getName(),
@@ -67,4 +79,5 @@ public class AuthController {
 
     // DTO
     public record LoginRequest(String username, String password) {}
+    public record RegisterRequest(String username, String password) {} // 🔽 추가
 }
