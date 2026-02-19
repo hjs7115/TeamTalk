@@ -35,7 +35,7 @@ public class ChatJoinService {
             throw new IllegalArgumentException("해당 서버에 소속된 사용자만 참여할 수 있습니다.");
         }
 
-        // ✅ 중복 join 방지
+        // 중복 join 방지
         if (chatJoinMapper.exists(roomId, memberId) > 0) {
             return; // 이미 참여중이면 무시(정책)
         }

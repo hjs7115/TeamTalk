@@ -197,3 +197,8 @@ CREATE TABLE signup_request (
                                 CONSTRAINT fk_signup_request_reviewed_by
                                     FOREIGN KEY (reviewed_by) REFERENCES member(member_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- chat_join PK 추가 (중복 join 방지)
+ALTER TABLE chat_join
+    ADD CONSTRAINT pk_chat_join
+        PRIMARY KEY (member_id, room_id);
