@@ -1,7 +1,6 @@
 package com.example.chat_server.service;
 
 import com.example.chat_server.dto.ChatRoomCreateRequest;
-import com.example.chat_server.entity.ChatRoom;
 import com.example.chat_server.mapper.ChatRoomMapper;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +21,7 @@ public class ChatRoomService {
             throw new IllegalArgumentException("roomName은 필수입니다.");
         }
 
-        ChatRoom r = new ChatRoom();
-        r.setServerId(req.getServerId());
-        r.setRoomName(req.getRoomName().trim());
-
-        chatRoomMapper.insert(r);
-        return r.getRoomId();
+        chatRoomMapper.insertRoom(req.getServerId(), req.getRoomName().trim());
+        return chatRoomMapper.selectLastInsertId();
     }
 }
