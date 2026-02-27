@@ -19,36 +19,20 @@ repositories {
 }
 
 dependencies {
-    /* ===== 필수 (API 서버 기본) ===== */
-    implementation 'org.springframework.boot:spring-boot-starter-web'        // REST API
-    implementation 'org.springframework.boot:spring-boot-starter-security'   // 인증/인가
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3' // MyBatis
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'   // Swagger UI
-    runtimeOnly   'com.mysql:mysql-connector-j'                               // MySQL JDBC
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    /* ===== 테스트 (필수) ===== */
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+    // ✅ springdoc 2.2.0 → 2.7.0 (Boot 3.4.x와 호환성 개선)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
     testImplementation 'org.springframework.security:spring-security-test'
-
-    /* ===== 선택(편의/운영용): 필요할 때만 주석 해제 ===== */
-
-    // 1) Bean 검증(요청 DTO @NotNull, @Email 등)
-    // implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    // 2) 롬복(보일러플레이트 제거) — 사용 시에만 두 줄 함께 켜기
-    // compileOnly 'org.projectlombok:lombok'
-    // annotationProcessor 'org.projectlombok:lombok'
-
-    // 3) 개발 편의(핫리로드 느낌, 프로퍼티 실시간 반영 일부)
-    // developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-    // 4) 운영 모니터링(헬스체크/메트릭) — actuator 엔드포인트 열어 관리할 때
-    // implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-    // 5) 통합테스트에서 도커로 DB 띄울 때 (Testcontainers)
-    // testImplementation 'org.testcontainers:mysql:1.20.3'
-    // testImplementation 'org.testcontainers:junit-jupiter:1.20.3'
 }
 
 tasks.named('test') {
