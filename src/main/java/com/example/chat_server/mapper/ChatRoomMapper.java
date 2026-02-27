@@ -1,5 +1,6 @@
 package com.example.chat_server.mapper;
 
+import com.example.chat_server.entity.ChatRoom;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,3 +14,4 @@ public interface ChatRoomMapper {
     Long selectLastInsertId(); // 방 생성 직후 room_id 얻기
     Map<String, Object> selectRoomById(@Param("roomId") Long roomId);
 }
+

@@ -2,6 +2,7 @@ package com.example.chat_server.controller;
 
 import com.example.chat_server.dto.CreateRoomRequest;
 import com.example.chat_server.dto.SendMessageRequest;
+import com.example.chat_server.service.ChatJoinService;
 import com.example.chat_server.service.ChatService;
 import com.example.chat_server.service.CustomUserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,9 +16,11 @@ import java.util.Map;
 public class ChatController {
 
     private final ChatService chatService;
+    private final ChatJoinService chatJoinService;
 
-    public ChatController(ChatService chatService) {
+    public ChatController(ChatService chatService, ChatJoinService chatJoinService) {
         this.chatService = chatService;
+        this.chatJoinService = chatJoinService;
     }
 
     @PostMapping("/rooms")
@@ -36,7 +39,8 @@ public class ChatController {
         Long memberId = user.getMemberId();
         Long deptId = user.getDeptId();
 
-        chatService.joinRoom(memberId, deptId, roomId);
+        // 안전한 참여 규칙(서버 소속 여부 + 중복 join 방지)을 ChatJoinService로 일원화
+        chatJoinService.join(roomId, memberId, deptId);
         return Map.of("ok", true);
     }
 
